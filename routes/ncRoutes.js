@@ -30,16 +30,16 @@ routes.route('/')
             console.log(err);
             res.statusCode = 403;
             res.setHeader('Content-Type', 'application/json');
-            res.end('داده های ورودی مجددا بررسی و ارسال شود');
+            res.json({message: 'داده های ورودی مجددا بررسی و ارسال شود', status: 'failed'});
         });
     })
     .put((req, res, next) => {
         res.statusCode = 403;
-        res.end('مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید');
+        res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
     })
     .delete((req, res, next) => {
         res.statusCode = 403;
-        res.end('مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید');
+        res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
     });
 routes.route('/:ncId')
     .get((req, res, next) => {
@@ -54,7 +54,7 @@ routes.route('/:ncId')
     })
     .post((req, res, next) => {
         res.statusCode = 403;
-        res.end('مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید');
+        res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
         })
     .put((req, res, next) => {
         Nc.findByIdAndUpdate(req.params.ncId, {$set: req.body}, {new: true})
