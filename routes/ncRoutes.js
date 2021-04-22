@@ -1,6 +1,7 @@
 const express = require('express');
 
 const Nc = require('../model/nc');
+const ncSchema = require('../security/checkInput');
 
 const routes = express.Router();
 
@@ -16,14 +17,21 @@ routes.route('/')
         })
     })
     .post((req, res, next) => {
-        Nc.create(req.body)
-            .then((newNc) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(newNc);
-            }).catch((err) => {
+        ncSchema.validate(req.body).then((resp) => {
+            Nc.create(req.body)
+                .then((newNc) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(newNc);
+                }).catch((err) => {
                 console.log(err);
-        })
+            })
+            }).catch((err) => {
+            console.log(err);
+            res.statusCode = 403;
+            res.setHeader('Content-Type', 'application/json');
+            res.end('داده های ورودی مجددا بررسی و ارسال شود');
+        });
     })
     .put((req, res, next) => {
         res.statusCode = 403;

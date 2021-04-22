@@ -29,6 +29,7 @@ app.use(bodyParser.json());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set Routes
+app.use('/user', require('./routes/userRoutes'));
 app.use('/nc',require('./routes/ncRoutes'));
 
 
