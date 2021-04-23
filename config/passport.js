@@ -49,7 +49,7 @@ passport.deserializeUser((id, done) => {
 });
 
 exports.getToken = (user) => {
-    return jwt.sign(user, secretKey, {expiresIn: 3600});
+    return jwt.sign(user, secretKey, {expiresIn: 20000});
 };
 
 var opts = {};
@@ -58,7 +58,6 @@ opts.secretOrKey = secretKey;
 
 exports.jwtPassport = passport.use(new JwtStrategy(opts,
     (jwt_payload, done) => {
-        console.log("JWT payload: ", jwt_payload);
         User.findOne({_id: jwt_payload._id}, (err, user) => {
             if (err) {
                 return done(null, false, {message: "نام کاربری یا کلمه عبور صحیح نمی باشد"});

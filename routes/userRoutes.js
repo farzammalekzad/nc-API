@@ -34,11 +34,18 @@ routes.route('/register')
        }
     });
 
+routes.get('/logout', (req, res, next) => {
+    req.logout();
+    res.statusCode = 200;
+    res.setHeader('Content-Type', 'application/json');
+    res.json({success: true, message: 'خروج موفقیت آمیز بود'});
+})
+
 routes.post('/login', passport.authenticate('local'), (req, res, next) => {
     var token = authenticate.getToken({_id: req.user._id});
     res.statusCode = 200;
     res.setHeader('Content-Type', 'application/json');
-    res.json({success: true, token: token, message: 'شما با موفقیت وارد شدید' , username: req.user.fullname});
+    res.json({success: true, token: token, message: 'شما با موفقیت وارد شدید' , username: req.user});
 });
 
 

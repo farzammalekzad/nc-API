@@ -2,23 +2,35 @@ const express = require('express');
 
 const Nc = require('../model/nc');
 const ncSchema = require('../security/checkInput');
+const authenticate = require('../config/passport');
 
 const routes = express.Router();
 
 routes.route('/')
-    .get((req, res, next) => {
-        Nc.find()
-            .then((ncs) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(ncs);
-            }).catch((err) => {
-                console.log(err);
-        })
+    .get(authenticate.verifyUser, (req, res, next) => {
+       if (req.user.admin === true) {
+           Nc.find()
+               .then((ncs) => {
+                   res.statusCode = 200;
+                   res.setHeader('Content-Type', 'application/json');
+                   res.json(ncs);
+               }).catch((err) => {
+               console.log(err);
+           })
+       } else {
+           Nc.find({user: req.user.id})
+               .then((ncs) => {
+                   res.statusCode = 200;
+                   res.setHeader('Content-Type', 'application/json');
+                   res.json(ncs);
+               }).catch((err) => {
+               console.log(err);
+           });
+       }
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         ncSchema.validate(req.body).then((resp) => {
-            Nc.create(req.body)
+            Nc.create({...req.body, user: req.user.id})
                 .then((newNc) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
@@ -33,16 +45,16 @@ routes.route('/')
             res.json({message: 'داده های ورودی مجددا بررسی و ارسال شود', status: 'failed'});
         });
     })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
     });
 routes.route('/:ncId')
-    .get((req, res, next) => {
+    .get(authenticate.verifyUser, (req, res, next) => {
         Nc.findById(req.params.ncId)
             .then((nc) => {
                 res.statusCode = 200;
@@ -52,11 +64,11 @@ routes.route('/:ncId')
                 console.log(err);
         })
     })
-    .post((req, res, next) => {
+    .post(authenticate.verifyUser, (req, res, next) => {
         res.statusCode = 403;
         res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
         })
-    .put((req, res, next) => {
+    .put(authenticate.verifyUser, (req, res, next) => {
         Nc.findByIdAndUpdate(req.params.ncId, {$set: req.body}, {new: true})
             .then((nc) => {
                 res.statusCode = 200;
@@ -66,7 +78,7 @@ routes.route('/:ncId')
                 console.log(err);
         });
     })
-    .delete((req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         Nc.findByIdAndRemove(req.params.ncId)
             .then((resp) => {
                 res.statusCode = 200;
