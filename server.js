@@ -31,7 +31,7 @@ app.use(bodyParser.json());
 //session Config
 app.use(
     session({
-        secret: "secret",
+        secret: process.env.SECRET,
         cookie: { maxAge: 60000 },
         resave: false,
         saveUninitialized: false,
@@ -40,7 +40,7 @@ app.use(
 
 // Passport Configuration
 app.use(passport.initialize());
-app.use(passport.session())
+app.use(passport.session());
 
 
 // Set public Folder (set Static)
@@ -49,6 +49,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 // Set Routes
 app.use('/user', require('./routes/userRoutes'));
 app.use('/nc',require('./routes/ncRoutes'));
+app.use('/upload', require('./routes/imageRoutes'));
 
 
 const PORT = process.env.PORT;
