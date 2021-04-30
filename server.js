@@ -6,6 +6,7 @@ const dotEnv = require('dotenv');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const session = require("express-session");
+const cors = require('cors');
 
 const connectDB = require('./config/db');
 
@@ -42,6 +43,8 @@ app.use(
 app.use(passport.initialize());
 app.use(passport.session());
 
+//CORS Policy
+app.use(cors());
 
 // Set public Folder (set Static)
 app.use(express.static(path.join(__dirname, 'public')));

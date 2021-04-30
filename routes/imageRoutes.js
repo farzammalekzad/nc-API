@@ -3,6 +3,7 @@ const multer = require('multer');
 const uuid = require('uuid').v4;
 
 const authenticate = require('../config/passport');
+//const cors = require('../config/cors');
 
 const routes = express.Router();
 
@@ -33,11 +34,14 @@ const upload = multer({
 
 
     routes.route('/')
-    .get((req, res, next) => {
+     .options( (req, res) => {
+            res.sendStatus(200);
+        })
+    .get( (req, res, next) => {
         res.statusCode = 403;
         res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
     })
-    .post(authenticate.verifyUser, upload, (req, res, next) => {
+    .post( authenticate.verifyUser, upload, (req, res, next) => {
         res.statusCode = 200;
         res.setHeader('Content-Type', 'application/json');
         res.json(req.file);
