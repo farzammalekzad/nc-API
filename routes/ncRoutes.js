@@ -58,12 +58,13 @@ routes.route('/')
     });
 routes.route('/:ncId')
 
-    .get((req, res, next) => {
+    .get(authenticate.verifyUser, (req, res, next) => {
         Nc.findById(req.params.ncId)
+            .populate('user')
             .then((nc) => {
                 res.statusCode = 200;
                 res.setHeader('Content-Type', 'application/json');
-                res.json(nc);
+                res.json({nc, username: nc.user.fullname});
             }).catch((err) => {
                 console.log(err);
         })
