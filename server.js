@@ -22,12 +22,17 @@ connectDB();
 
 const app = express()
 
+
 //Logging Config (morgan)
 if (process.env.NODE_ENV === 'development') {
     app.use(morgan('dev'));
 }
 //BodyParser config
 app.use(bodyParser.json());
+
+//View Engine
+app.set('view engine', 'ejs');
+app.set('views', 'views');
 
 //session Config
 app.use(
@@ -50,6 +55,7 @@ app.use(cors());
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Set Routes
+app.use('/', require('./routes/index'));
 app.use('/user', require('./routes/userRoutes'));
 app.use('/nc',require('./routes/ncRoutes'));
 app.use('/upload', require('./routes/imageRoutes'));
