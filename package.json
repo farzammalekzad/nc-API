@@ -2,10 +2,10 @@
   "name": "NC-API",
   "version": "1.0.0",
   "description": "General API for non-conformance report application",
-  "main": "server.js",
+  "main": "app.js",
   "scripts": {
-    "start": "cross-env NODE_ENV=production node server",
-    "dev": "cross-env NODE_ENV=development nodemon server"
+    "start": "cross-env NODE_ENV=production node app",
+    "dev": "cross-env NODE_ENV=development nodemon app"
   },
   "keywords": [],
   "author": "Mohammad Malekzad",

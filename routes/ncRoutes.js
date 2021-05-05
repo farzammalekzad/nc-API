@@ -83,15 +83,20 @@ routes.route('/:ncId')
                 console.log(err);
         });
     })
-    .delete( (req, res, next) => {
-        Nc.findByIdAndRemove(req.params.ncId)
-            .then((resp) => {
-                res.statusCode = 200;
-                res.setHeader('Content-Type', 'application/json');
-                res.json(resp);
-            }).catch((err) => {
+    .delete( authenticate.verifyUser, (req, res, next) => {
+        if (req.user.admin === true) {
+            Nc.findByIdAndRemove(req.params.ncId)
+                .then((resp) => {
+                    res.statusCode = 200;
+                    res.setHeader('Content-Type', 'application/json');
+                    res.json(resp);
+                }).catch((err) => {
                 console.log(err);
-        })
+            })
+        } else {
+            res.statusCode = 403;
+            res.json({message: 'مجاز به انجام این عملیات نمی باشید لطفا مجددا امتحان نکنید', status: 'failed'});
+        }
     });
 
 
