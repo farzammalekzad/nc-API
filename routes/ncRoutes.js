@@ -83,13 +83,13 @@ routes.route('/:ncId')
                 console.log(err);
         });
     })
-    .delete( authenticate.verifyUser, (req, res, next) => {
+    .delete(authenticate.verifyUser, (req, res, next) => {
         if (req.user.admin === true) {
             Nc.findByIdAndRemove(req.params.ncId)
                 .then((resp) => {
                     res.statusCode = 200;
                     res.setHeader('Content-Type', 'application/json');
-                    res.json(resp);
+                    res.json({status: 'success'});
                 }).catch((err) => {
                 console.log(err);
             })

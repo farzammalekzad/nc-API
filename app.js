@@ -56,6 +56,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 // Set Routes
 app.use('/', require('./routes/index'));
+app.use('/server', require('./routes/serverRoutes'));
 app.use('/user', require('./routes/userRoutes'));
 app.use('/nc',require('./routes/ncRoutes'));
 app.use('/upload', require('./routes/imageRoutes'));
